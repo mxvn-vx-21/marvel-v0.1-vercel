@@ -1,0 +1,29 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "marvel-wtf",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-09-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "marvel-wtf" }],
+
+  // Non-secret config. Secrets (BETTER_AUTH_SECRET, OAuth secrets, RESEND_API_KEY)
+  // are set with `wrangler secret put <NAME>` — never put them here.
+  "vars": {
+    "BETTER_AUTH_URL": "https://marvel.wtf"
+  },
+
+  // Avatars/banners are stored in Postgres (table `media`) — no R2 needed.
+  // To use R2 later: create a bucket and add  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "<name>" }]
+
+  // Postgres connection pooling. Create with:
+  //   wrangler hyperdrive create marvel-wtf-db --connection-string="postgres://..."
+  // then paste the returned id below.
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "REPLACE_WITH_HYPERDRIVE_ID",
+      "localConnectionString": "postgresql://marvel:marvel@localhost:5432/marvelwtf"
+    }
+  ]
+}
